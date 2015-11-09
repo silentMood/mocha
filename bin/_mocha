@@ -390,7 +390,12 @@ if (program.watch) {
 // load
 
   mocha.files = files;
-  runner = mocha.run(program.exit ? exit : exitLater);
+
+  runner = mocha.run(function() {
+    setTimeout(function() {
+      program.exit ? exit() : exitLater()
+    }, 30000)
+  });
 
   var infos = []
 
