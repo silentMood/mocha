@@ -346,8 +346,8 @@ if (program.watch) {
     try {
       mocha.files = files;
       runAgain = false;
-      global.runner = runner = mocha.run(function(){
-        global.runner = runner = null;
+      runner = mocha.run(function(){
+        runner = null;
         if (runAgain) {
           rerun();
         }
@@ -390,8 +390,17 @@ if (program.watch) {
 // load
 
   mocha.files = files;
-  global.runner = runner = mocha.run(program.exit ? exit : exitLater);
+  runner = mocha.run(program.exit ? exit : exitLater);
 
+  var infos = []
+
+  runner.on('end', function() {
+    global.TestReportHandler && global.TestReportHandler(runner.stats, infos)
+  })
+
+  runner.on('fail', function(test, err) {
+    infos.push([test.title, test.err.message].join('\ninfomation: '))
+  });
 }
 
 function exitLater(code) {
