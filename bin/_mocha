@@ -346,8 +346,8 @@ if (program.watch) {
     try {
       mocha.files = files;
       runAgain = false;
-      runner = mocha.run(function(){
-        runner = null;
+      global.runner = runner = mocha.run(function(){
+        global.runner = runner = null;
         if (runAgain) {
           rerun();
         }
@@ -390,7 +390,7 @@ if (program.watch) {
 // load
 
   mocha.files = files;
-  runner = mocha.run(program.exit ? exit : exitLater);
+  global.runner = runner = mocha.run(program.exit ? exit : exitLater);
 
 }
 
